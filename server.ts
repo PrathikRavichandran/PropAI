@@ -275,7 +275,7 @@ async function startServer() {
   console.log("[Server] Starting initialization...");
   
   const app = express();
-  const PORT = 3000;
+  const PORT = parseInt(process.env.PORT || "3000", 10);
 
   app.use(express.json());
 
@@ -555,7 +555,9 @@ async function startServer() {
     }
   });
 
-  // Vite Middleware
+  // Frontend serving:
+  //   dev   → Vite middleware with HMR
+  //   prod  → static files from ./dist with SPA fallback to index.html
   if (process.env.NODE_ENV !== "production") {
     console.log("Initializing Vite middleware...");
     const vite = await createViteServer({
@@ -564,6 +566,14 @@ async function startServer() {
     });
     app.use(vite.middlewares);
     console.log("Vite middleware initialized.");
+  } else {
+    console.log("Serving prebuilt frontend from ./dist");
+    const distDir = path.resolve(__dirname, "dist");
+    app.use(express.static(distDir));
+    app.get("*", (req, res, next) => {
+      if (req.path.startsWith("/api/")) return next();
+      res.sendFile(path.join(distDir, "index.html"));
+    });
   }
 
   app.listen(PORT, "0.0.0.0", () => {

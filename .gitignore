@@ -3,6 +3,13 @@ build/
 dist/
 coverage/
 .DS_Store
+Thumbs.db
 *.log
 .env*
 !.env.example
+
+# SQLite (auto-seeded on startup; should not be committed)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
