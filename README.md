@@ -7,7 +7,7 @@ sdk: docker
 app_port: 7860
 pinned: false
 license: mit
-short_description: Property Manager AI Agent — portfolio dashboard with Gemini insights
+short_description: Property Manager AI Agent with Gemini insights
 ---
 
 # PropAI — Property Manager AI Agent
